@@ -200,4 +200,166 @@ WITH Branch_report AS (
 )
 SELECT * FROM Branch_report;
 
+Here’s how you can format **all tasks on a single README page** with clear headings and separate SQL code blocks. This way, everything stays organized and easy to read:
 
+```markdown
+# 📚 Library Management System – SQL Tasks
+
+## 🗄️ Task 1: Create a New Book Record
+```sql
+INSERT INTO books(isbn, book_title, category, rental_price, status, author, publisher)
+VALUES ('978-1-60129-456-2', 'To Kill a Mockingbird', 'Classic', 6.00, 'yes', 'Harper Lee', 'J.B. Lippincott & Co.');
+```
+
+## 🗄️ Task 2: Update an Existing Member's Address
+```sql
+UPDATE members
+SET member_address = '123 Main state'
+WHERE member_id = 'C101';
+```
+
+## 🗄️ Task 3: Delete a Record from Issued Status
+```sql
+DELETE FROM issued_status
+WHERE issued_id = 'IS111';
+```
+
+## 🗄️ Task 4: Retrieve All Books Issued by a Specific Employee
+```sql
+SELECT * FROM issued_status
+WHERE issued_emp_id = 'E101';
+```
+
+## 🗄️ Task 5: List Members Who Have Issued More Than One Book
+```sql
+SELECT issued_emp_id, COUNT(*) AS total_books_issued
+FROM issued_status
+GROUP BY issued_emp_id
+HAVING COUNT(*) > 1;
+```
+
+## 🗄️ Task 6: Create Summary Table of Issued Books
+```sql
+WITH book_issued_cnt AS (
+    SELECT ist.issued_book_isbn, b.book_title, b.category,
+           COUNT(ist.issued_id) AS issued_count
+    FROM issued_status AS ist
+    JOIN books AS b ON ist.issued_book_isbn = b.isbn
+    GROUP BY ist.issued_book_isbn, b.book_title, b.category
+)
+SELECT * FROM book_issued_cnt;
+```
+
+## 🗄️ Task 7: Retrieve All Books in a Specific Category
+```sql
+SELECT * FROM books
+WHERE category = 'Classic';
+```
+
+## 🗄️ Task 8: Find Total Rental Income by Category
+```sql
+SELECT b.category, SUM(b.rental_price) AS Total_rental_income, COUNT(*)
+FROM books AS b
+JOIN issued_status AS ist ON b.isbn = ist.issued_book_isbn
+GROUP BY b.category;
+```
+
+## 🗄️ Task 9: List Members Who Registered in the Last 180 Days
+```sql
+SELECT * FROM members
+WHERE reg_date >= DATEADD(DAY, -180, GETDATE());
+```
+
+## 🗄️ Task 10: List Employees with Their Branch Manager's Name
+```sql
+SELECT e.emp_id, e.emp_name, e.position, e.salary, e.branch_id,
+       b.manager_id, b.branch_address, b.contact_no, e2.emp_name AS manager_name
+FROM employees AS e
+JOIN branch AS b ON e.branch_id = b.branch_id
+JOIN employees AS e2 ON b.manager_id = e2.emp_id;
+```
+
+## 🗄️ Task 11: Books with Rental Price Above Threshold
+```sql
+WITH expensive_book AS (
+    SELECT * FROM books WHERE rental_price >= 7.00
+)
+SELECT * FROM expensive_book;
+```
+
+## 🗄️ Task 12: Retrieve Books Not Yet Returned
+```sql
+SELECT * 
+FROM issued_status AS ist
+LEFT JOIN return_status AS rs ON rs.issued_id = ist.issued_id
+WHERE rs.return_id IS NULL;
+```
+
+## 🗄️ Task 13: Identify Members with Overdue Books
+```sql
+SELECT ist.issued_member_id, mb.member_name, bk.book_title,
+       ist.issued_date, rs.return_date,
+       DATEDIFF(DAY, ist.issued_date, GETDATE()) AS over_dues_days
+FROM issued_status AS ist
+JOIN members AS mb ON ist.issued_member_id = mb.member_id
+JOIN books AS bk ON bk.isbn = ist.issued_book_isbn
+LEFT JOIN return_status AS rs ON rs.issued_id = ist.issued_id
+WHERE rs.return_date IS NULL
+  AND DATEDIFF(DAY, ist.issued_date, GETDATE()) > 30
+ORDER BY ist.issued_member_id;
+```
+
+## 🗄️ Task 14: Stored Procedure – Update Book Status on Return
+```sql
+CREATE PROCEDURE add_return_record
+    @p_return_id VARCHAR(10),
+    @p_issued_id VARCHAR(10),
+    @p_book_quality VARCHAR(10)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @v_isbn VARCHAR(50);
+    DECLARE @v_book_name VARCHAR(50);
+
+    INSERT INTO return_status(return_id, issued_id, return_date, book_quality)
+    VALUES (@p_return_id, @p_issued_id, CAST(GETDATE() AS DATE), @p_book_quality);
+
+    SELECT @v_book_name = issued_book_name,
+           @v_isbn = issued_book_isbn
+    FROM issued_status
+    WHERE issued_id = @p_issued_id;
+
+    UPDATE books
+    SET status = 'yes'
+    WHERE isbn = @v_isbn;
+
+    PRINT 'Thank you for returning the book: ' + @v_book_name;
+END;
+GO
+
+EXEC add_return_record 'rs121', 'IS101', 'good';
+```
+
+## 🗄️ Task 15: Branch Performance Report
+```sql
+WITH Branch_report AS (
+    SELECT br.branch_id, br.manager_id,
+           COUNT(ist.issued_id) AS Nr_book_issued,
+           COUNT(rs.return_id) AS NR_book_returned,
+           SUM(bk.rental_price) AS Total_revenue
+    FROM issued_status AS ist
+    JOIN employees AS em ON ist.issued_emp_id = em.emp_id
+    JOIN branch AS br ON em.branch_id = br.branch_id
+    LEFT JOIN return_status AS rs ON rs.issued_id = ist.issued_id
+    JOIN books AS bk ON ist.issued_book_isbn = bk.isbn
+    GROUP BY br.branch_id, br.manager_id
+)
+SELECT * FROM Branch_report;
+```
+```
+
+---
+
+✨ This layout keeps **all tasks on one page** with clear headings and SQL code blocks. You can copy-paste this directly into your GitHub README, and it will render beautifully with syntax highlighting.  
+
+Would you like me to also add a **Table of Contents** at the top so readers can jump directly to each task?
