@@ -13,6 +13,6 @@ This project demonstrates the implementation of a Library Management System usin
 4. Advanced SQL Queries: Develop complex queries to analyze and retrieve specific data.
 
 ## Project Structure
--** Database Creation : ** Created a database named library_db.
+-**Database Creation :** Created a database named library_db.
 - gh
 - 
