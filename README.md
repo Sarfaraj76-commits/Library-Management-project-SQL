@@ -71,7 +71,7 @@ ALTER TABLE return_status
 ADD CONSTRAINT fk_issued_status
 FOREIGN KEY (issued_id)
 REFERENCES issued_status(issued_id);
-
+```
 
 ## 2. CRUD Operations
 - Create: Inserted sample records into the books table.
