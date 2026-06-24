@@ -239,8 +239,4 @@ SELECT * FROM Branch_report;
 ```
 ```
 
----
 
-✨ This layout keeps **all tasks on one page** with clear headings and SQL code blocks. You can copy-paste this directly into your GitHub README, and it will render beautifully with syntax highlighting.  
-
-Would you like me to also add a **Table of Contents** at the top so readers can jump directly to each task?
