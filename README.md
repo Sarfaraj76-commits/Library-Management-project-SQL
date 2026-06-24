@@ -83,7 +83,6 @@ REFERENCES issued_status(issued_id);
 
 ### 🗄️ SQL Queries
 
-```sql
 --========================Project Task================================
 # 📚 Library Management System – SQL Tasks
 
