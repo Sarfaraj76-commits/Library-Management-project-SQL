@@ -17,10 +17,11 @@ This project demonstrates the implementation of a Library Management System usin
 - **Table Creation:** Created tables for branches, employees, members, books, issued status, and return status. Each table  includes relevant columns and relationships.
 - **Database setup :**
  <img width="524" height="338" alt="image" src="https://github.com/user-attachments/assets/2af2dee4-c8fa-4e70-bcdd-68dc112d7525" />
+ 
  ## 🗄️ Database Setup – Foreign Keys and Constraints
 
 ```sql
--- Create Database
+-- Create Database---
 CREATE DATABASE library_project_2;
 USE library_project_2;
 
@@ -70,7 +71,7 @@ ALTER TABLE return_status
 ADD CONSTRAINT fk_issued_status
 FOREIGN KEY (issued_id)
 REFERENCES issued_status(issued_id);
-
+'''
 ## 2. CRUD Operations
 - **Create:** Inserted sample records into the books table.
 - **Read:** Retrieved and displayed data from various tables.
