@@ -17,54 +17,59 @@ This project demonstrates the implementation of a Library Management System usin
 - **Table Creation:** Created tables for branches, employees, members, books, issued status, and return status. Each table  includes relevant columns and relationships.
 - **Database setup :**
  <img width="524" height="338" alt="image" src="https://github.com/user-attachments/assets/2af2dee4-c8fa-4e70-bcdd-68dc112d7525" />
- 
- create database library_project_2
-use library_project_2
+ ## 🗄️ Database Setup – Foreign Keys and Constraints
 
+```sql
+-- Create Database
+CREATE DATABASE library_project_2;
+USE library_project_2;
 
--------- foreign key----
-alter table issued_status
-add constraint fk_members
-foreign key (issued_member_id)
-references members(member_id);
-
-alter table issued_status
-add constraint fk_books
-foreign key (issued_book_isbn)
-references books(isbn);
-
-alter table issued_status
-add constraint fk_employees
-foreign key (issued_emp_id)
-references employees(emp_id);
+-- Add Foreign Keys to issued_status
+ALTER TABLE issued_status
+ADD CONSTRAINT fk_members
+FOREIGN KEY (issued_member_id)
+REFERENCES members(member_id);
 
 ALTER TABLE issued_status
-ALTER COLUMN issued_emp_id nvarchar(10);
+ADD CONSTRAINT fk_books
+FOREIGN KEY (issued_book_isbn)
+REFERENCES books(isbn);
 
+ALTER TABLE issued_status
+ADD CONSTRAINT fk_employees
+FOREIGN KEY (issued_emp_id)
+REFERENCES employees(emp_id);
 
-alter table employees
-add constraint fk_branch
-foreign key (branch_id)
-references branch(branch_id);
+-- Adjust column type for issued_emp_id
+ALTER TABLE issued_status
+ALTER COLUMN issued_emp_id NVARCHAR(10);
 
+-- Add Foreign Key to employees
 ALTER TABLE employees
-ALTER COLUMN branch_id nvarchar(50);
+ADD CONSTRAINT fk_branch
+FOREIGN KEY (branch_id)
+REFERENCES branch(branch_id);
 
-alter table return_status
-add constraint fk_issued_status
-foreign key (issued_id)
-references issued_status(issued_id);
+-- Adjust column type for branch_id
+ALTER TABLE employees
+ALTER COLUMN branch_id NVARCHAR(50);
 
-
-SELECT issued_id
-FROM issued_status
-WHERE issued_id NOT IN (SELECT issued_id FROM issued_status);
-
+-- Add Foreign Key to return_status
 ALTER TABLE return_status
 ADD CONSTRAINT fk_issued_status
 FOREIGN KEY (issued_id)
 REFERENCES issued_status(issued_id);
 
+-- Validation Query Example
+SELECT issued_id
+FROM issued_status
+WHERE issued_id NOT IN (SELECT issued_id FROM issued_status);
+
+-- Re-add Foreign Key (if needed)
+ALTER TABLE return_status
+ADD CONSTRAINT fk_issued_status
+FOREIGN KEY (issued_id)
+REFERENCES issued_status(issued_id);
 
 ## 2. CRUD Operations
 - **Create:** Inserted sample records into the books table.
@@ -78,7 +83,6 @@ REFERENCES issued_status(issued_id);
 
 ```sql
 --========================Project Task================================
-```markdown
 # 📚 Library Management System – SQL Tasks
 
 ## 🗄️ Task 1: Create a New Book Record
