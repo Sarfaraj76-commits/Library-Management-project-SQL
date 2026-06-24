@@ -302,4 +302,12 @@ WITH Branch_report AS (
 )
 SELECT * FROM Branch_report;
 
+## 📝 Task 2: Update an Existing Member's Address
+
+```sql
+UPDATE members
+SET member_address = '125 Oak St'
+WHERE member_id = 'C103';
+
+
 
