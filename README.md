@@ -237,6 +237,24 @@ WITH Branch_report AS (
 )
 SELECT * FROM Branch_report;
 ```
+## /* Task 16: CTAS: Create a Table of Active Members
+Use the CREATE TABLE AS (CTAS) statement to create a new table active_members 
+containing members who have issued at least one book in the last 2 months.*/
+
+```sql
+WITH active_members AS (
+    SELECT *
+    FROM members
+    WHERE member_id IN (
+							SELECT issued_member_id
+							FROM issued_status
+							WHERE issued_date >= DATEADD(MONTH, -2, GETDATE())
+						)
+)
+-- Option 1: Just query the CTE
+SELECT * FROM active_members;
+```
+
 ```
 
 
